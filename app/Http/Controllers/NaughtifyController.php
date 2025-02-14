@@ -3,15 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Channel;
+use App\Models\Naughtification;
 use App\Models\Notification;
-use App\Models\Registration;
-use App\Models\User;
-use App\Notifications\Message;
 use App\Services\TelegramService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use NotificationChannels\Telegram\TelegramMessage;
-use NotificationChannels\Telegram\TelegramUpdates;
 
 class NaughtifyController extends Controller
 {
@@ -29,6 +25,30 @@ class NaughtifyController extends Controller
     public function store(Request $request)
     {
         Notification::send($request->user(), $request->message);
+    }
+
+    public function send(Request $request)
+    {
+        $request->validate([
+            'phone' => 'string',
+            'email' => 'string',
+            'subject' => 'string|required',
+            'message' => 'string|required'
+        ]);
+
+        // $exists = Naughtification::where('phone', $request->phone)
+        //     ->where('email', $request->email)
+        //     ->where('message', $request->message)
+        //     ->exists();
+        // if ($exists) {
+        //     //resend notification
+        // }
+
+        $naughtification = $request->user()
+            ->naughtifications()
+            ->create($request->all());
+        $naughtification->notify();
+        return response()->json(['message' => 'ok']);
     }
 
     /**

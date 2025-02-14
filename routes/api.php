@@ -11,5 +11,7 @@ Route::get('/user', function (Request $request) {
 
 Route::controller(NaughtifyController::class)->group(function () {
     Route::post('/webhook/telegram', 'update');
+    Route::post('/webhook/telegram', 'update');
     Route::post('/naughtify', 'store')->middleware(['auth:sanctum']);
+    Route::post('/send', 'send')->middleware(['auth:sanctum']);
 });

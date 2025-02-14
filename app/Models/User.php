@@ -68,7 +68,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
         // if ($panel->getId() === 'admin') {
         //     return str_ends_with($this->email, '@yourdomain.com') && $this->hasVerifiedEmail();
         // }
- 
+
         return true;
     }
 
@@ -92,5 +92,10 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
     public function messages()
     {
         return $this->hasMany(Notification::class);
+    }
+
+    public function naughtifications()
+    {
+        return $this->hasMany(Naughtification::class);
     }
 }
